@@ -60,4 +60,23 @@ public class Request {
     public void setDate(Date date) {
         this.date = date;
     }
+
+    public Banner getBanner() {
+        return banner;
+    }
+
+    public void setBanner(Banner banner) {
+        this.banner = banner;
+    }
+
+    @Override
+    public String toString() {
+        return "Request{" +
+                "id=" + id +
+                ", ipAddress='" + ipAddress + '\'' +
+                ", userAgentText='" + userAgentText + '\'' +
+                ", date=" + date +
+                ", banner=" + banner +
+                '}';
+    }
 }
