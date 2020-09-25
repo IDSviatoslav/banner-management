@@ -1,7 +1,6 @@
 package com.banners.server.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -9,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Where(clause = "is_deleted=0")
 @Table(name = "categories")
 public class Category {
     @Id
@@ -21,7 +19,6 @@ public class Category {
     @NotBlank
     String reqName;
     @JsonIgnore
-    @Column(name = "is_deleted")
     boolean isDeleted;
 
     @JsonIgnore

@@ -85,7 +85,7 @@ public class CategoryController {
         if (searchQueryText == null) {
             return categoryDB.findAll();
         }
-        return categoryDB.findByNameIgnoreCaseContaining(searchQueryText);
+        return categoryDB.searchQuery(searchQueryText);
     }
 
     boolean validateCategoryInput(Category category){

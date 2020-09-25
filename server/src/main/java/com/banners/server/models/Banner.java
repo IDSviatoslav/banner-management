@@ -1,7 +1,6 @@
 package com.banners.server.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -10,7 +9,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Where(clause="is_deleted=0")
 @Table(name = "banners")
 public class Banner {
     @Id
@@ -23,7 +21,6 @@ public class Banner {
     @NotNull
     double price;
     @JsonIgnore
-    @Column(name = "is_deleted")
     boolean isDeleted;
 
     @ManyToOne

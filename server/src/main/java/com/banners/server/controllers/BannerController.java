@@ -104,6 +104,9 @@ public class BannerController {
         System.out.println("user agent: " + userAgentText);
         Request curRequest = new Request(ipAddress, userAgentText, curTime);
         List<Request> curUserRequests = requestDB.findByIpAddressAndUserAgentText(ipAddress, userAgentText);
+        for (Request request : curUserRequests) {
+            System.out.println(request);
+        }
         Category category = categoryDB.findByReqName(requestName).orElse(null);
         List<Banner> banners;
         if (category!=null) {
@@ -160,7 +163,7 @@ public class BannerController {
         if (searchQueryText == null) {
             return bannerDB.findAll();
         }
-        return bannerDB.findByNameIgnoreCaseContaining(searchQueryText);
+        return bannerDB.searchQuery(searchQueryText);
     }
 
     boolean validateBannerInput(Banner banner){
