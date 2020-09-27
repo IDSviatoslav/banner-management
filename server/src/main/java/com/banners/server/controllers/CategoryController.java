@@ -18,7 +18,6 @@ public class CategoryController {
     @Autowired
     private CategoryDB categoryDB;
 
-    @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping("/categories")
     Iterable<Category> showAllCategories(){
         return categoryDB.findAll();
@@ -26,14 +25,12 @@ public class CategoryController {
 
     @GetMapping(path = "/category/{categoryId}")
     Optional<Category> getCategory(@PathVariable int categoryId){
-        System.out.println("in get category " + categoryId);
-        Optional<Category> foundCategory = categoryDB.findById(categoryId);
-        return foundCategory;
+        return categoryDB.findById(categoryId);
     }
 
     @PostMapping(path = "/category")
     ResponseEntity<StringResponse> addCategory(@RequestBody Category newCategory){
-        if (!categoryDB.findByName(newCategory.getName()).isPresent() && !categoryDB.findByReqName(newCategory.getReqName()).isPresent()) {
+        if (!categoryDB.findByNameAndIsDeleted(newCategory.getName(), false).isPresent() && !categoryDB.findByReqNameAndIsDeleted(newCategory.getReqName(), false).isPresent()) {
             if (validateCategoryInput(newCategory)) {
                 categoryDB.save(newCategory);
                 return new ResponseEntity<>(new StringResponse("category saved"), HttpStatus.OK);
@@ -45,11 +42,9 @@ public class CategoryController {
 
     @PutMapping(path = "/category")
     ResponseEntity<StringResponse>  updateCategory(@RequestBody Category updateCategory){
-        System.out.println("update category!" + updateCategory);
         if (validateCategoryInput(updateCategory)) {
             Category foundCategory = categoryDB.findById(updateCategory.getId()).orElse(null);
             if (foundCategory!=null) {
-                    System.out.println("writing...");
                     foundCategory.setName(updateCategory.getName());
                     foundCategory.setReqName(updateCategory.getReqName());
                     categoryDB.save(foundCategory);
@@ -70,6 +65,7 @@ public class CategoryController {
                 return new ResponseEntity<>(new StringResponse("category deleted"), HttpStatus.OK);
             } else {
                 List<Integer> notDeletedBannersIds = new ArrayList<>();
+                System.out.println(category.getBanners());
                 for (Banner el : category.getBanners()) {
                     notDeletedBannersIds.add(el.getId());
                 }
@@ -79,7 +75,6 @@ public class CategoryController {
         return new ResponseEntity<>(new StringResponse("category not found"), HttpStatus.BAD_REQUEST);
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping(path = {"/search/categories", "/search/categories/{searchQueryText}"})
     Iterable<Category> searchCategoriesByName(@PathVariable(required = false) String searchQueryText){
         if (searchQueryText == null) {
